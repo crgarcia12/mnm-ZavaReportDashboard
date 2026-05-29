@@ -1,0 +1,45 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "description": "Tasks template for modernization plan. Generate this file alongside plan.md to track individual migration tasks.",
+  "tasks": [
+    {
+      "type": "security",
+      "id": "001-security-cve-remediation",
+      "description": "Scan dependencies for known CVEs and remediate vulnerabilities before Azure deployment.",
+      "reason": "A security remediation gate is required for modernization readiness and safer cloud deployment.",
+      "requirements": "Scan all project dependencies for known CVEs and remediate identified vulnerabilities before deployment. Upgrade vulnerable dependencies to minimum patched versions; if a major-version upgrade is required, document dependency, current version, upgraded version, and breaking-change risk. Verify the project build and existing tests after remediation.",
+      "environmentConfiguration": "Use the existing .NET Framework 4.8 application environment and build flow established in this repository.",
+      "successCriteria": {
+        "passBuild": "true",
+        "generateNewUnitTests": "false",
+        "passUnitTests": "true"
+      }
+    },
+    {
+      "type": "deployment",
+      "id": "002-deployment-azure-container-apps",
+      "description": "Deploy the application to Azure Container Apps for cloud hosting.",
+      "reason": "The modernization goal is to move the application to Azure using a managed deployment target.",
+      "requirements": "Containerize and deploy the application to Azure Container Apps using existing Azure resources and managed identity-oriented deployment practices.",
+      "dependencies": [
+        "001-security-cve-remediation"
+      ],
+      "skills": [
+        {
+          "name": "azcli-containerapp-deploy",
+          "location": "builtin"
+        }
+      ],
+      "targetAzureService": "Azure Container Apps",
+      "resourceStatus": "Use existing Azure resources",
+      "deploymentTool": "bicep"
+    }
+  ],
+  "metadata": {
+    "planName": "modernization-plan",
+    "projectName": "mnm-ZavaReportDashboard",
+    "language": "dotnet",
+    "createdAt": "2026-05-29T00:53:22Z",
+    "version": "1.0"
+  }
+}
